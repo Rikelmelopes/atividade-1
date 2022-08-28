@@ -1,0 +1,221 @@
+const express = require("express")
+const app = express()
+
+app.post('/Q1', (req, res)=>{
+
+    const n1 = 8
+    const n2 = 8
+    const n3 = 8
+    const n4 = 9
+
+    const soma = n1 + n2 + n3 + n4
+    const media = soma / 4
+
+    const resposta = {
+        soma:soma,
+        media:media,
+    }
+  if(media< 5){
+      resposta.resultado = "reprovado"
+  }else if(media <7){
+      resposta.resultado = "em recuperação ,ainda a tempo"
+  }else if(media<=10 ){
+      resposta.resultado = "aprovado"
+  }else{
+      resposta.resultado = "não é possivel media maior que 10"
+  }
+  
+  res.json(resposta)
+    })
+
+app.post('/Q2', (req, res)=>{
+    
+    const total = req.body.total*1
+    const brancos =  req.body.brancos*1
+    const nulos = req.body.nulos*1
+    const validos = req.body.validos*1
+    
+    const resultado = {
+        total: total,
+        validos: `${validos} de votos validos, com percentual de ${total * (validos/100)}%`,
+        brancos: `${brancos} de votos brancos, com percentual de ${total * (brancos/100)}%`,
+        nulos: `${nulos} de votos nulos, com percentual de ${total * (nulos/100)}%`,
+    }
+
+    const bonus = brancos + nulos + validos
+    if (bonus != total){
+        resultado.mensagem = 'Total ultrapassado!'
+    }
+
+    
+    res.json(resultado)
+    
+    })
+
+app.post('/Q3', (req, res)=>{
+
+
+    const salario = req.body.salario * 1
+    let reajuste = req.body.reajuste * 1
+
+    if (salario <= 0){
+     resposta = { type: 'Erro', mensagem: 'Falha no Preencimento das informações'}
+     res.status(400).json(resposta)  
+    } else {
+
+     if (reajuste > 1){
+        reajuste = reajuste/100
+     }
+
+    const calculo = (salario * reajuste) + salario 
+
+    const resultado = {
+        salario: salario,
+        reajuste: reajuste,
+        calculo: `O novo salário será : R$${calculo},00`
+    }
+    
+    res.json(resultado)
+
+    }
+  
+    })
+
+app.post('/Q4', (res, req)=>{
+
+    const custo = req.body.custo*1
+    const distri = 0.45
+    const impos = 0.28
+    
+    const calculo = (custo * distri) + (custo * impos)
+
+    const resultado = {
+        custo: custo,
+        distribuicao: distri,
+        imposto: impos,
+        custoFinal: calculo + custo
+    }
+
+    res.json(resultado)
+
+    })
+
+app.post('/Q5', (res, req)=>{
+
+    const custo = req.body.custo*1
+    let dis = req.body.dis*1
+    let imp = req.body.imp*1
+    
+    
+    if (imp <= 0 || dis <= 0 || custo <= 0){
+     resposta = { type: 'Erro', mensagem: 'Falha no Preencimento das informações'}
+     res.status(400).json(resposta)  
+    } else {
+     
+    
+     if (dis > 1){
+         dis = dis/100
+     }
+    
+     if (imp > 1){
+         imp = imp/100
+     }
+
+     const calculo = (custo * dis) + (custo * imp)
+     
+     const resultado = {
+         custo: custo,
+         distribuicao: dis,
+         imposto: imp,
+         custoFinal: calculo + custo
+     }
+
+     res.json(resultado)
+    }
+    })
+
+app.post('/Q6', (res, req)=>{
+    const salarioF = req.body.salarioF*1
+    const carrosV = req.body.carrosV*1
+    const venda = req.body.venda*1
+    const comissao = req.body.comissao*1
+
+    const novoSalario = (salarioF * (1 + (carrosV * (comissao / 100)))  + (venda * 0.05))
+
+    const resultado = {
+        salarioF: `R$${salarioF.toFixed(2).replace('.', ',')}`,
+        carrosV: carrosV,
+        venda: `R$${venda.toFixed(2).replace('.', ',')}`,
+        comissao: `R$${comissao.toFixed(1)}% por veículo`,
+        novoSalario : `R$${novoSalario.toFixed(2).replace('.', ',')}`
+    }
+
+    res.json(resultado)
+
+
+    })
+
+app.post('/Q7', (res, req)=>{
+
+    const n1 = req.body.nota1*1
+    const n2 = req.body.nota2*1
+    
+    const media = ((n1 * 4) + (n2 * 6)) / 10
+
+    const resposta = {
+        nota1: n1,
+        nota2: n2,
+        media: media
+    }
+
+    if (media < 5) {
+        resposta.resultado = 'Reprovado'
+    } else if (media < 7) {
+        resposta.resultado = 'Em recuperação'
+    } else if (media <= 10) {
+        resposta.resultado = 'Aprovado'
+    } else {
+
+        resposta.resultado = 'Nota maior do que 10!'
+
+        resposta.type = 'Erro!'
+    }
+
+    res.json(resposta)
+
+    })
+  
+
+app.post('/Q8', (res, req)=>{
+
+    const ra = req.body.raio*1
+    const al = req.body.altura*1
+    
+    const volume = 3.14 * ra**2 * al
+
+    const resposta = {
+        raio: ra,
+        altura: al,
+        volume: volume.toFixed(2)*1
+    }
+
+    res.json(resposta)
+    })
+
+app.get('/Q9', (res, req)=>{
+    
+    const rike = req.body.rike*1
+    const lme = req.body.lme*1
+
+    const calculo = (rike + lme) * rike
+
+    resultado = {
+        calculo: calculo
+    }
+    
+    res.json(resultado)
+    })
+
+app.listen(7777, ()=>{
+    console.log('servidor rodando em http://127.0.0.1:7777')
+})
